@@ -40,17 +40,39 @@ several DID methods / resolvers and kept for backward compatibility.
 | `threshold?` | `number` |
 | `type` | `string` |
 
+## Variables
+
+### validSignatures
+
+> `const` **validSignatures**: `Record`\<`string`, `string`[]\>
+
 ## Functions
 
-### EthTypedDataSigner()
+### EthTypedDataSignerAlgorithm()
+
+> **EthTypedDataSignerAlgorithm**(`recoverable`?): `SignerAlgorithm`
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `recoverable`? | `boolean` |
+
+#### Returns
+
+`SignerAlgorithm`
+
+***
+
+### ethTypedDataSigner()
 
 #### Param
 
 #### Param
 
-#### EthTypedDataSigner(domain, privateKey)
+#### ethTypedDataSigner(privateKey, domain)
 
-> **EthTypedDataSigner**(`domain`, `privateKey`): `Signer`
+> **ethTypedDataSigner**(`privateKey`, `domain`?): `Signer`
 
 Creates a configured signer function for signing data using the EIP-712 algorithm.
 
@@ -60,8 +82,8 @@ Creates a configured signer function for signing data using the EIP-712 algorith
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `domain` | `TypedDataDomain` | an EIP-712 domain object |
 | `privateKey` | `SigningKey` | the signer's private key |
+| `domain`? | `TypedDataDomain` | an EIP-712 domain object |
 
 ##### Returns
 
@@ -71,9 +93,9 @@ Creates a configured signer function for signing data using the EIP-712 algorith
 
 ##### Param
 
-#### EthTypedDataSigner(domain, privateKeyHex)
+#### ethTypedDataSigner(privateKeyHex, domain)
 
-> **EthTypedDataSigner**(`domain`, `privateKeyHex`): `Signer`
+> **ethTypedDataSigner**(`privateKeyHex`, `domain`?): `Signer`
 
 Creates a configured signer function for signing data using the EIP-712 algorithm.
 
@@ -83,8 +105,8 @@ Creates a configured signer function for signing data using the EIP-712 algorith
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `domain` | `TypedDataDomain` | an EIP-712 domain object |
 | `privateKeyHex` | `string` | the signer's private key as a hexadecinmal string |
+| `domain`? | `TypedDataDomain` | an EIP-712 domain object |
 
 ##### Returns
 
@@ -94,9 +116,9 @@ Creates a configured signer function for signing data using the EIP-712 algorith
 
 ##### Param
 
-#### EthTypedDataSigner(domain, ethersSigner)
+#### ethTypedDataSigner(ethersSigner, domain)
 
-> **EthTypedDataSigner**(`domain`, `ethersSigner`): `Signer`
+> **ethTypedDataSigner**(`ethersSigner`, `domain`?): `Signer`
 
 Creates a configured signer function for signing data using the EIP-712 algorithm.
 
@@ -106,8 +128,8 @@ Creates a configured signer function for signing data using the EIP-712 algorith
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `domain` | `TypedDataDomain` | an EIP-712 domain object |
 | `ethersSigner` | `Signer` | an Ethers' signer. It could be use to pass external signers connected e.g. with walletconnect or injected a browser context. |
+| `domain`? | `TypedDataDomain` | an EIP-712 domain object |
 
 ##### Returns
 

@@ -10,7 +10,7 @@ import { toJose, type SignerAlgorithm, EcdsaSignature, type Signer, decodeJWT } 
  * @param domain an EIP-712 domain object
  * @param privateKey the signer's private key
  */
-export function ethTypedDataSigner (domain: TypedDataDomain, privateKey: SigningKey): Signer
+export function ethTypedDataSigner (privateKey: SigningKey, domain?: TypedDataDomain): Signer
 /**
  * Creates a configured signer function for signing data using the EIP-712 algorithm.
  *
@@ -19,7 +19,7 @@ export function ethTypedDataSigner (domain: TypedDataDomain, privateKey: Signing
  * @param domain an EIP-712 domain object
  * @param privateKeyHex the signer's private key as a hexadecinmal string
  */
-export function ethTypedDataSigner (domain: TypedDataDomain, privateKeyHex: string): Signer
+export function ethTypedDataSigner (privateKeyHex: string, domain?: TypedDataDomain): Signer
 /**
  * Creates a configured signer function for signing data using the EIP-712 algorithm.
  *
@@ -28,16 +28,16 @@ export function ethTypedDataSigner (domain: TypedDataDomain, privateKeyHex: stri
  * @param domain an EIP-712 domain object
  * @param ethersSigner an Ethers' signer. It could be use to pass external signers connected e.g. with walletconnect or injected a browser context.
  */
-export function ethTypedDataSigner (domain: TypedDataDomain, ethersSigner: EthersSigner): Signer
+export function ethTypedDataSigner (ethersSigner: EthersSigner, domain?: TypedDataDomain): Signer
 /**
  *
  * @param domain
  * @param ethersSignerOrPrivateKey
  * @returns
  */
-export function ethTypedDataSigner (domain: TypedDataDomain, ethersSignerOrPrivateKey: SigningKey | string | EthersSigner): Signer {
+export function ethTypedDataSigner (ethersSignerOrPrivateKey: SigningKey | string | EthersSigner, domain?: TypedDataDomain): Signer {
   return async (data: string | Uint8Array): Promise<string> => {
-    let dataObj: object
+    let dataObj: Record<string, any>
     const dataStr = typeof data !== 'string' ? data.toString() : data
     try {
       dataObj = JSON.parse(dataStr)
@@ -49,7 +49,17 @@ export function ethTypedDataSigner (domain: TypedDataDomain, ethersSignerOrPriva
         header,
         payload
       }
+      if (dataObj.payload.domain === undefined) {
+        dataObj.payload.domain = domain
+      } else if (domain === undefined) {
+        domain = dataObj.payload.domain
+      }
     }
+
+    if (domain === undefined) {
+      throw new Error('No domain specified. Pass the domain argument or define domain in the JWS payload')
+    }
+
     const types = jsonToSolidityTypes(dataObj, { mainTypeName: 'JWT' })
     const solidityTypes = types.types
 
