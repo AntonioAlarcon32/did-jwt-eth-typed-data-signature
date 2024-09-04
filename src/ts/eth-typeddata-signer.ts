@@ -1,6 +1,6 @@
 import { Signer as EthersSigner, SigningKey, type TypedDataDomain, Wallet } from 'ethers'
 import { jsonToSolidityTypes } from '@juanelas/solidity-types-from-json'
-import { toJose, type SignerAlgorithm, EcdsaSignature, type Signer, decodeJWT } from 'did-jwt'
+import { toJose, type SignerAlgorithm, decodeJWT, Signer } from 'did-jwt'
 
 /**
  *  Creates a configured signer function for signing data using the EIP-712 algorithm.
@@ -36,9 +36,9 @@ export function ethTypedDataSigner (ethersSigner: EthersSigner, domain?: TypedDa
  * @returns
  */
 export function ethTypedDataSigner (ethersSignerOrPrivateKey: SigningKey | string | EthersSigner, domain?: TypedDataDomain): Signer {
-  return async (data: string | Uint8Array): Promise<string> => {
+  const signer = async (data: string | Uint8Array): Promise<string> => {
     let dataObj: Record<string, any>
-    const dataStr = typeof data !== 'string' ? data.toString() : data
+    const dataStr = typeof data !== 'string' ? (new TextDecoder()).decode(data) : data
     try {
       dataObj = JSON.parse(dataStr)
     } catch (error) {
@@ -71,15 +71,18 @@ export function ethTypedDataSigner (ethersSignerOrPrivateKey: SigningKey | strin
     }
     return signature
   }
+
+  return signer
 }
 
 export function EthTypedDataSignerAlgorithm (recoverable?: boolean): SignerAlgorithm {
   return async function sign (payload: string, signer: Signer): Promise<string> {
-    const signature: EcdsaSignature | string = await signer(payload)
-    if (signature instanceof Object) {
-      return toJose(signature, recoverable)
-    } else {
-      return signature
+    try {
+      await signer('non typeddata input')
+      throw new Error('only a Signer created with the ethTypedDataSigner function can be used here')
+    } catch (error) {
+      const signature = await signer(payload)
+      return (typeof signature === 'string') ? signature : toJose(signature, recoverable)
     }
   }
 }

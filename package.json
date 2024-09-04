@@ -168,7 +168,7 @@
   "dependencies": {
     "@juanelas/solidity-types-from-json": "^1.0.1",
     "did-jwt": "file:../did-jwt-exports",
-    "ethers": "^6.13.2",
+    "ethers": "^6.11.1",
     "uint8arrays": "^5.1.0"
   }
 }
