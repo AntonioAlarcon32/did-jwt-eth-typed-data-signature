@@ -78,7 +78,7 @@ export function ethTypedDataSigner (ethersSignerOrPrivateKey: SigningKey | strin
 export function EthTypedDataSignerAlgorithm (recoverable?: boolean): SignerAlgorithm {
   return async function sign (payload: string, signer: Signer): Promise<string> {
     try {
-      await signer('non typeddata input')
+      await signer('invalid JSON data')
       throw new Error('only a Signer created with the ethTypedDataSigner function can be used here')
     } catch (error) {
       const signature = await signer(payload)
