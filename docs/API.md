@@ -50,13 +50,7 @@ several DID methods / resolvers and kept for backward compatibility.
 
 ### EthTypedDataSignerAlgorithm()
 
-> **EthTypedDataSignerAlgorithm**(`recoverable`?): `SignerAlgorithm`
-
-#### Parameters
-
-| Parameter | Type |
-| ------ | ------ |
-| `recoverable`? | `boolean` |
+> **EthTypedDataSignerAlgorithm**(): `SignerAlgorithm`
 
 #### Returns
 
