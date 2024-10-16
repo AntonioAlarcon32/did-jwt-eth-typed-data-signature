@@ -7,11 +7,11 @@
 
 {{PKG_DESCRIPTION}}
 
-- [Install and use](#install-and-use)
+- [Install](#install)
 - [Usage example](#usage-example)
 - [API reference documentation](#api-reference-documentation)
 
-## Install and use
+## Install
 
 `{{PKG_NAME}}` can be imported to your project with `npm`:
 
@@ -47,30 +47,10 @@ import * as {{PKG_CAMELCASE}} from '{{PKG_NAME}}'
 
 ## Usage example
 
-```typescript
-import { ethTypedDataSigner, verifyEthTypedDataSignature } from '{{PKG_NAME}}'
-import { Wallet, type TypedDataDomain } from 'ethers'
+A typical use would be to use any web3 wallet to sign a JWT using `did-jwt`. With `did-jwt`, verification keys are resolved using the Decentralized ID (DID) of the signing identity of the token, which is passed as the `iss` attribute of the JWT payload. As a result for verification to work, the verification key should be added to the issuer's DID document.
 
-(async () => {
-    const EIP712Domain: TypedDataDomain = {
-      chainId: 11155111
-    }
-    const randomWallet = Wallet.createRandom()
-    const signer = ethTypedDataSigner(randomWallet, EIP712Domain)
-    const address: string = await randomWallet.getAddress()
-    const jwtWithoutSignature = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJkb21haW4iOnsiY2hhaW5JZCI6MTExNTUxMTF9fQ'
-    const signature = await signer(jwtWithoutSignature)
-    
-    // The following functions throws error if verification fails; otherwise it returns an object with the properties of the verification method used to resolve the did
-    verifyEthTypedDataSignature(jwtWithoutSignature, signature as string, [
-        {
-        blockchainAccountId: `eip155:11155111:${address}`,
-        id: 'did:ethr',
-        type: 'EthereumAddress',
-        controller: 'did:ethr:1234'
-        }
-    ])
-})()
+```typescript
+TO-DO
 
 ```
 

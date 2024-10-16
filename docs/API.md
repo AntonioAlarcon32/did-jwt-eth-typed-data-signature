@@ -46,21 +46,18 @@ several DID methods / resolvers and kept for backward compatibility.
 
 > `const` **validSignatures**: `Record`\<`string`, `string`[]\>
 
+A record of valid proof types that can be verified by this verifier for the EthTypedDataSignature signature algorithm.
+
 ## Functions
 
 ### ethTypedDataSigner()
-
-#### Param
-
-#### Param
 
 #### ethTypedDataSigner(privateKey, domain)
 
 > **ethTypedDataSigner**(`privateKey`, `domain`?): `Signer`
 
 Creates a configured signer function for signing data using the EIP-712 algorithm.
-
- The signing function itself takes the data as a `Uint8Array` or `string` and returns a `base64Url`-encoded signature
+The signing function itself takes the data as a `Uint8Array` or `string` and returns a `base64Url`-encoded signature.
 
 ##### Parameters
 
@@ -75,17 +72,12 @@ Creates a configured signer function for signing data using the EIP-712 algorith
 
 a signer that signs using EIP-712 (Ethereum Typed Data) signarures
 
-##### Param
-
-##### Param
-
 #### ethTypedDataSigner(privateKeyHex, domain)
 
 > **ethTypedDataSigner**(`privateKeyHex`, `domain`?): `Signer`
 
 Creates a configured signer function for signing data using the EIP-712 algorithm.
-
- The signing function itself takes the data as a `Uint8Array` or `string` and returns a `base64Url`-encoded signature
+The signing function itself takes the data as a `Uint8Array` or `string` and returns a `base64Url`-encoded signature.
 
 ##### Parameters
 
@@ -100,23 +92,18 @@ Creates a configured signer function for signing data using the EIP-712 algorith
 
 a signer that signs using EIP-712 (Ethereum Typed Data) signarures
 
-##### Param
-
-##### Param
-
 #### ethTypedDataSigner(ethersSigner, domain)
 
 > **ethTypedDataSigner**(`ethersSigner`, `domain`?): `Signer`
 
 Creates a configured signer function for signing data using the EIP-712 algorithm.
-
- The signing function itself takes the data as a `Uint8Array` or `string` and returns a `base64Url`-encoded signature
+The signing function itself takes the data as a `Uint8Array` or `string` and returns a `base64Url`-encoded signature.
 
 ##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `ethersSigner` | `Signer` | an Ethers' signer. It could be use to pass external signers connected e.g. with walletconnect or injected a browser context. |
+| `ethersSigner` | `Signer` | an Ethers' signer. It could be used to pass external signers connected e.g. with walletconnect or injected a browser context. |
 | `domain`? | `TypedDataDomain` | an EIP-712 domain object |
 
 ##### Returns
@@ -125,17 +112,15 @@ Creates a configured signer function for signing data using the EIP-712 algorith
 
 a signer that signs using EIP-712 (Ethereum Typed Data) signarures
 
-##### Param
-
-##### Param
-
 ***
 
 ### EthTypedDataSignerAlgorithm()
 
 > **EthTypedDataSignerAlgorithm**(): `SignerAlgorithm`
 
-Returns a valid SignerAlgorithm for eth typedData signature. A SignerAlgorithm is a funtction that expects a payload to sign and a Signer. For it to work it must use a Signer created with the [ethTypedDataSigner](API.md#ethtypeddatasigner) function.
+Returns a valid SignerAlgorithm for eth typedData signature.
+A SignerAlgorithm is a function that expects a payload to sign and a Signer.
+For it to work it must use a Signer created with the [ethTypedDataSigner](API.md#ethtypeddatasigner) function.
 
 #### Returns
 

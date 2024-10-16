@@ -65,7 +65,7 @@ export function verifyEthTypedDataSignature (
 }
 
 /**
- * TODO
+ * A record of valid proof types that can be verified by this verifier for the EthTypedDataSignature signature algorithm.
  */
 export const validSignatures: Record<string, string[]> = {
   EthTypedDataSignature: [

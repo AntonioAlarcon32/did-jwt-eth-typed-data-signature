@@ -3,39 +3,36 @@ import { jsonToSolidityTypes } from '@juanelas/solidity-types-from-json'
 import { type SignerAlgorithm, decodeJWT, Signer } from 'did-jwt'
 
 /**
- *  Creates a configured signer function for signing data using the EIP-712 algorithm.
+ * Creates a configured signer function for signing data using the EIP-712 algorithm.
+ * The signing function itself takes the data as a `Uint8Array` or `string` and returns a `base64Url`-encoded signature.
  *
- *  The signing function itself takes the data as a `Uint8Array` or `string` and returns a `base64Url`-encoded signature
- *
- * @param domain an EIP-712 domain object
  * @param privateKey the signer's private key
+ * @param domain an EIP-712 domain object
+ *
+ * @returns a signer that signs using EIP-712 (Ethereum Typed Data) signarures
  */
 export function ethTypedDataSigner (privateKey: SigningKey, domain?: TypedDataDomain): Signer
 /**
  * Creates a configured signer function for signing data using the EIP-712 algorithm.
+ * The signing function itself takes the data as a `Uint8Array` or `string` and returns a `base64Url`-encoded signature.
  *
- *  The signing function itself takes the data as a `Uint8Array` or `string` and returns a `base64Url`-encoded signature
- *
- * @param domain an EIP-712 domain object
  * @param privateKeyHex the signer's private key as a hexadecinmal string
+ * @param domain an EIP-712 domain object
+ *
+ * @returns a signer that signs using EIP-712 (Ethereum Typed Data) signarures
  */
 export function ethTypedDataSigner (privateKeyHex: string, domain?: TypedDataDomain): Signer
 /**
  * Creates a configured signer function for signing data using the EIP-712 algorithm.
+ * The signing function itself takes the data as a `Uint8Array` or `string` and returns a `base64Url`-encoded signature.
  *
- *  The signing function itself takes the data as a `Uint8Array` or `string` and returns a `base64Url`-encoded signature
- *
+ * @param ethersSigner an Ethers' signer. It could be used to pass external signers connected e.g. with walletconnect or injected a browser context.
  * @param domain an EIP-712 domain object
- * @param ethersSigner an Ethers' signer. It could be use to pass external signers connected e.g. with walletconnect or injected a browser context.
- */
-export function ethTypedDataSigner (ethersSigner: EthersSigner, domain?: TypedDataDomain): Signer
-/**
- *
- * @param domain
- * @param ethersSignerOrPrivateKey
  *
  * @returns a signer that signs using EIP-712 (Ethereum Typed Data) signarures
  */
+export function ethTypedDataSigner (ethersSigner: EthersSigner, domain?: TypedDataDomain): Signer
+
 export function ethTypedDataSigner (ethersSignerOrPrivateKey: SigningKey | string | EthersSigner, domain?: TypedDataDomain): Signer {
   const signer = async (data: string | Uint8Array): Promise<string> => {
     let dataObj: Record<string, any>
@@ -77,7 +74,9 @@ export function ethTypedDataSigner (ethersSignerOrPrivateKey: SigningKey | strin
 }
 
 /**
- * Returns a valid {@link SignerAlgorithm} for eth typedData signature. A {@link SignerAlgorithm} is a funtction that expects a payload to sign and a {@link Signer}. For it to work it must use a {@link Signer} created with the {@link ethTypedDataSigner} function.
+ * Returns a valid SignerAlgorithm for eth typedData signature.
+ * A SignerAlgorithm is a function that expects a payload to sign and a Signer.
+ * For it to work it must use a Signer created with the {@link ethTypedDataSigner} function.
  *
  * @returns the EIP-712 Ethereum Typed Data SignerAlgorithm
  */
