@@ -78,7 +78,7 @@ export function ethTypedDataSigner (ethersSignerOrPrivateKey: SigningKey | strin
 
 /**
  * Returns a valid {@link SignerAlgorithm} for eth typedData signature. A {@link SignerAlgorithm} is a funtction that expects a payload to sign and a {@link Signer}. For it to work it must use a {@link Signer} created with the {@link ethTypedDataSigner} function.
- * 
+ *
  * @returns the EIP-712 Ethereum Typed Data SignerAlgorithm
  */
 export function EthTypedDataSignerAlgorithm (): SignerAlgorithm {
