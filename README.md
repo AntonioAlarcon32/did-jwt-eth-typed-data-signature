@@ -7,10 +7,9 @@
 
 EIP-712 Ethereum TypedData Signer/Verifier for DID-JWT. It supports using any Web3 connected wallet.
 
-- [{{PKG\_NAME}}](#pkg_name)
-  - [Install and use](#install-and-use)
-  - [Usage example](#usage-example)
-  - [API reference documentation](#api-reference-documentation)
+- [Install and use](#install-and-use)
+- [Usage example](#usage-example)
+- [API reference documentation](#api-reference-documentation)
 
 ## Install and use
 
@@ -49,7 +48,30 @@ You can also download browser ESM, IIFE and UMD bundles directly from the [relea
 ## Usage example
 
 ```typescript
-YOUR TYPESCRIPT EXAMPLE CODE HERE
+import { ethTypedDataSigner, verifyEthTypedDataSignature } from 'did-jwt-eth-typed-data-signature'
+import { Wallet, type TypedDataDomain } from 'ethers'
+
+(async () => {
+    const EIP712Domain: TypedDataDomain = {
+      chainId: 11155111
+    }
+    const randomWallet = Wallet.createRandom()
+    const signer = ethTypedDataSigner(randomWallet, EIP712Domain)
+    const address: string = await randomWallet.getAddress()
+    const jwtWithoutSignature = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJkb21haW4iOnsiY2hhaW5JZCI6MTExNTUxMTF9fQ'
+    const signature = await signer(jwtWithoutSignature)
+    
+    // The following functions throws error if verification fails; otherwise it returns an object with the properties of the verification method used to resolve the did
+    verifyEthTypedDataSignature(jwtWithoutSignature, signature as string, [
+        {
+        blockchainAccountId: `eip155:11155111:${address}`,
+        id: 'did:ethr',
+        type: 'EthereumAddress',
+        controller: 'did:ethr:1234'
+        }
+    ])
+})()
+
 ```
 
 ## API reference documentation

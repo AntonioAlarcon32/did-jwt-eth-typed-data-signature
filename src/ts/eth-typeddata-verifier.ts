@@ -6,11 +6,18 @@ import { type TypedDataDomain, verifyTypedData } from 'ethers'
 export { type VerificationMethod } from 'did-resolver'
 
 /**
- * Verifies a JWT signature using the EIP-712 algorithm. The TypedData structure is automatically inferred from the header and payload of the JWT: `{ header: any, payload:: any}`
+ * Verifies a JWT signature using the EIP-712 algorithm. The TypedData structure
+ * is automatically inferred from the header and payload of the JWT: `{ header:
+ * any, payload:: any }`.
  *
  * @param data the JWT data: headerBase64Url.payloadBase64Url
  * @param signature the JWT signature encoded in base64url
- * @param authenticators the list of authenticators to verify the signature against
+ * @param authenticators the list of verification methods to verify the signature against
+ *
+ * @returns an object with the properties of the verification method used to sign
+ *
+ * @throws Error
+ * Thrown if the verification fails. invalid_signature: Signature invalid for JWT
  */
 export function verifyEthTypedDataSignature (
   data: string,
@@ -57,6 +64,9 @@ export function verifyEthTypedDataSignature (
   return signer
 }
 
+/**
+ * TODO
+ */
 export const validSignatures: Record<string, string[]> = {
   EthTypedDataSignature: [
     'EcdsaSecp256k1VerificationKey2019',

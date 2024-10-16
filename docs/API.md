@@ -48,16 +48,6 @@ several DID methods / resolvers and kept for backward compatibility.
 
 ## Functions
 
-### EthTypedDataSignerAlgorithm()
-
-> **EthTypedDataSignerAlgorithm**(): `SignerAlgorithm`
-
-#### Returns
-
-`SignerAlgorithm`
-
-***
-
 ### ethTypedDataSigner()
 
 #### Param
@@ -83,6 +73,8 @@ Creates a configured signer function for signing data using the EIP-712 algorith
 
 `Signer`
 
+a signer that signs using EIP-712 (Ethereum Typed Data) signarures
+
 ##### Param
 
 ##### Param
@@ -105,6 +97,8 @@ Creates a configured signer function for signing data using the EIP-712 algorith
 ##### Returns
 
 `Signer`
+
+a signer that signs using EIP-712 (Ethereum Typed Data) signarures
 
 ##### Param
 
@@ -129,9 +123,25 @@ Creates a configured signer function for signing data using the EIP-712 algorith
 
 `Signer`
 
+a signer that signs using EIP-712 (Ethereum Typed Data) signarures
+
 ##### Param
 
 ##### Param
+
+***
+
+### EthTypedDataSignerAlgorithm()
+
+> **EthTypedDataSignerAlgorithm**(): `SignerAlgorithm`
+
+Returns a valid SignerAlgorithm for eth typedData signature. A SignerAlgorithm is a funtction that expects a payload to sign and a Signer. For it to work it must use a Signer created with the [ethTypedDataSigner](API.md#ethtypeddatasigner) function.
+
+#### Returns
+
+`SignerAlgorithm`
+
+the EIP-712 Ethereum Typed Data SignerAlgorithm
 
 ***
 
@@ -139,7 +149,9 @@ Creates a configured signer function for signing data using the EIP-712 algorith
 
 > **verifyEthTypedDataSignature**(`data`, `signature`, `authenticators`): [`VerificationMethod`](API.md#verificationmethod)
 
-Verifies a JWT signature using the EIP-712 algorithm. The TypedData structure is automatically inferred from the header and payload of the JWT: `{ header: any, payload:: any}`
+Verifies a JWT signature using the EIP-712 algorithm. The TypedData structure
+is automatically inferred from the header and payload of the JWT: `{ header:
+any, payload:: any }`.
 
 #### Parameters
 
@@ -147,8 +159,15 @@ Verifies a JWT signature using the EIP-712 algorithm. The TypedData structure is
 | ------ | ------ | ------ |
 | `data` | `string` | the JWT data: headerBase64Url.payloadBase64Url |
 | `signature` | `string` | the JWT signature encoded in base64url |
-| `authenticators` | [`VerificationMethod`](API.md#verificationmethod)[] | the list of authenticators to verify the signature against |
+| `authenticators` | [`VerificationMethod`](API.md#verificationmethod)[] | the list of verification methods to verify the signature against |
 
 #### Returns
 
 [`VerificationMethod`](API.md#verificationmethod)
+
+an object with the properties of the verification method used to sign
+
+#### Throws
+
+Error
+Thrown if the verification fails. invalid_signature: Signature invalid for JWT

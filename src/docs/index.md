@@ -7,10 +7,9 @@
 
 {{PKG_DESCRIPTION}}
 
-- [{{PKG\_NAME}}](#pkg_name)
-  - [Install and use](#install-and-use)
-  - [Usage example](#usage-example)
-  - [API reference documentation](#api-reference-documentation)
+- [Install and use](#install-and-use)
+- [Usage example](#usage-example)
+- [API reference documentation](#api-reference-documentation)
 
 ## Install and use
 
@@ -49,7 +48,30 @@ import * as {{PKG_CAMELCASE}} from '{{PKG_NAME}}'
 ## Usage example
 
 ```typescript
-YOUR TYPESCRIPT EXAMPLE CODE HERE
+import { ethTypedDataSigner, verifyEthTypedDataSignature } from '{{PKG_NAME}}'
+import { Wallet, type TypedDataDomain } from 'ethers'
+
+(async () => {
+    const EIP712Domain: TypedDataDomain = {
+      chainId: 11155111
+    }
+    const randomWallet = Wallet.createRandom()
+    const signer = ethTypedDataSigner(randomWallet, EIP712Domain)
+    const address: string = await randomWallet.getAddress()
+    const jwtWithoutSignature = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJkb21haW4iOnsiY2hhaW5JZCI6MTExNTUxMTF9fQ'
+    const signature = await signer(jwtWithoutSignature)
+    
+    // The following functions throws error if verification fails; otherwise it returns an object with the properties of the verification method used to resolve the did
+    verifyEthTypedDataSignature(jwtWithoutSignature, signature as string, [
+        {
+        blockchainAccountId: `eip155:11155111:${address}`,
+        id: 'did:ethr',
+        type: 'EthereumAddress',
+        controller: 'did:ethr:1234'
+        }
+    ])
+})()
+
 ```
 
 ## API reference documentation

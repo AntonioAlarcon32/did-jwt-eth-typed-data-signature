@@ -26,13 +26,16 @@ const indexHtml = `<!DOCTYPE html>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <title>${name}</title>
     <script src="/mocha.js"></script>
-    <script src="/chai.js"></script>
   </head>
 
   <body>
 
   </body>
     <div id="mocha"></div>
+    <script type="module">
+      import * as chai from '/chai';
+      globalThis.chai = chai;
+    </script>
     <script>
       mocha.setup({
         ui: 'bdd',
@@ -42,7 +45,7 @@ const indexHtml = `<!DOCTYPE html>
       })
     </script>
     <script type="module">
-      import './tests.js'
+      import '/tests.js'
       window._mocha = mocha.run()
     </script>
   </html>`
@@ -146,7 +149,7 @@ class TestServer {
           res.writeHead(200, { 'Content-Type': 'text/javascript' })
           res.end(data)
         })
-      } else if (req.url === '/chai.js' || req.url === '/chai') {
+      } else if (req.url === '/chai') {
         fs.readFile(path.join(rootDir, 'node_modules/chai/chai.js'), function (err, data) {
           if (err) {
             res.writeHead(404)

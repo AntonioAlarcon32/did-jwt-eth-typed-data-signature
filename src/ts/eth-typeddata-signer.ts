@@ -33,7 +33,8 @@ export function ethTypedDataSigner (ethersSigner: EthersSigner, domain?: TypedDa
  *
  * @param domain
  * @param ethersSignerOrPrivateKey
- * @returns
+ *
+ * @returns a signer that signs using EIP-712 (Ethereum Typed Data) signarures
  */
 export function ethTypedDataSigner (ethersSignerOrPrivateKey: SigningKey | string | EthersSigner, domain?: TypedDataDomain): Signer {
   const signer = async (data: string | Uint8Array): Promise<string> => {
@@ -75,6 +76,11 @@ export function ethTypedDataSigner (ethersSignerOrPrivateKey: SigningKey | strin
   return signer
 }
 
+/**
+ * Returns a valid {@link SignerAlgorithm} for eth typedData signature. A {@link SignerAlgorithm} is a funtction that expects a payload to sign and a {@link Signer}. For it to work it must use a {@link Signer} created with the {@link ethTypedDataSigner} function.
+ * 
+ * @returns the EIP-712 Ethereum Typed Data SignerAlgorithm
+ */
 export function EthTypedDataSignerAlgorithm (): SignerAlgorithm {
   return async function sign (payload: string, signer: Signer): Promise<string> {
     try {
