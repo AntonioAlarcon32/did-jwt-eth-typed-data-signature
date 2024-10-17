@@ -105,7 +105,8 @@
     "test:node": "run-s test:node-cjs test:node-esm",
     "test:node-cjs": "npm run mocha-ts:cjs ",
     "test:node-esm": "npm run mocha-ts ",
-    "watch": "npm run mocha-ts:watch "
+    "watch": "npm run mocha-ts:watch ",
+    "prepare": "npm run build"
   },
   "ts-standard": {
     "project": "tsconfig.json",
@@ -167,7 +168,7 @@
   },
   "dependencies": {
     "@juanelas/solidity-types-from-json": "^1.0.1",
-    "did-jwt": "file:../did-jwt",
+    "did-jwt": "github:AntonioAlarcon32/did-jwt#dist",
     "ethers": "^6.11.1",
     "uint8arrays": "^5.1.0"
   }
