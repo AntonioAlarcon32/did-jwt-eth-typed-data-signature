@@ -7,7 +7,7 @@
 
 {{PKG_DESCRIPTION}}
 
-- [{{PKG\_NAME}}](#pkg_name)
+- [{{PKG_NAME}}](#pkg_name)
   - [Install](#install)
   - [Usage example](#usage-example)
   - [API reference documentation](#api-reference-documentation)
