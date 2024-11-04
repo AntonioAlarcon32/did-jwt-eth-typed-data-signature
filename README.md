@@ -7,9 +7,10 @@
 
 EIP-712 Ethereum TypedData Signer/Verifier for DID-JWT. It supports using any Web3 connected wallet.
 
-- [Install](#install)
-- [Usage example](#usage-example)
-- [API reference documentation](#api-reference-documentation)
+- [{{PKG\_NAME}}](#pkg_name)
+  - [Install](#install)
+  - [Usage example](#usage-example)
+  - [API reference documentation](#api-reference-documentation)
 
 ## Install
 
@@ -49,11 +50,52 @@ You can also download browser ESM, IIFE and UMD bundles directly from the [relea
 
 A typical use would be to use any web3 wallet to sign a JWT using `did-jwt`. With `did-jwt`, verification keys are resolved using the Decentralized ID (DID) of the signing identity of the token, which is passed as the `iss` attribute of the JWT payload. As a result for verification to work, the verification key should be added to the issuer's DID document.
 
-```typescript
-TO-DO
+1. Import did-jwt and the external ethereum typeddate signer
+    ```typescript
+    import {
+      ethTypedDataSigner,
+      EthTypedDataSignerAlgorithm,
+      verifyEthTypedDataSignature,
+      validSignatures,
+    } from 'did-jwt-eth-typed-data-signature'
 
-```
+    import { 
+      createJWT, 
+      decodeJWT, 
+      verifyJWT, 
+      AddSigningAlgorithm, 
+      AddVerifierAlgorithm,
+    } from 'did-jwt';
 
+    ```
+    > You should use a version of did-jwt supporting Ethereum EIP-712 typed-data signatures. There is currently a pull request on the main track. On the mean time you can install the did-jwt fork at [this fork](https://github.com/AntonioAlarcon32/did-jwt)
+2. Let use a web3 signer using an injected provider and the [`ethers`](https://github.com/ethers-io/ethers.js) library
+    ```typescript
+    const provider = new BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    ```
+3. Add the algorithms to did-jwt
+    ```typescript
+    AddSigningAlgorithm('EthTypedDataSignature', EthTypedDataSignerAlgorithm())
+    AddVerifierAlgorithm('EthTypedDataSignature', verifyEthTypedDataSignature, validSignatures)
+    ```
+4. Define the domain and ethTypedDataSigner
+    ```typescript
+    const domain: TypedDataDomain = {
+      name: 'VerifiableCredential',
+      version: '1',
+      chainId: 11155111, // Sepolia testnet
+    };
+    const jwtSigner = ethTypedDataSigner(signer, domain);
+    ```
+5. Now you can use the signer to sign and verify did-jwtSigner
+    ```typescript
+        const newJwt = await createJWT(
+          { sub: `did:ethr:sepolia:${await signer.getAddress()}`, name: 'Bob Smith', domain },
+          { issuer: `did:ethr:sepolia:${await signer.getAddress()}`, signer: jwtSigner },
+          { alg: 'EthTypedDataSignature' }
+        )
+    ```
 ## API reference documentation
 
 [Check the API](docs/API.md)

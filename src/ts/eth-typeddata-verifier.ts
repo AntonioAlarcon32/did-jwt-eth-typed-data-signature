@@ -8,11 +8,16 @@ export { type VerificationMethod } from 'did-resolver'
 /**
  * Verifies a JWT signature using the EIP-712 algorithm. The TypedData structure
  * is automatically inferred from the header and payload of the JWT: `{ header:
- * any, payload:: any }`.
+ * any, payload:: any }`. The EIP-712 domain should be obtained from the
+ * `payload.domain` of the input data. If not present, or may be overriden, an
+ * optional domain argument `domain`.
  *
  * @param data the JWT data: headerBase64Url.payloadBase64Url
  * @param signature the JWT signature encoded in base64url
- * @param authenticators the list of verification methods to verify the signature against
+ * @param authenticators the list of verification methods to verify the
+ * signature against
+ * @param domain an optional @link{TypedDataDomain} to use instead of the one in
+ * `payload.domain`
  *
  * @returns an object with the properties of the verification method used to sign
  *
@@ -22,7 +27,8 @@ export { type VerificationMethod } from 'did-resolver'
 export function verifyEthTypedDataSignature (
   data: string,
   signature: string,
-  authenticators: VerificationMethod[]
+  authenticators: VerificationMethod[],
+  domain?: TypedDataDomain
 ): VerificationMethod {
   let signer: VerificationMethod | undefined
 
@@ -40,19 +46,19 @@ export function verifyEthTypedDataSignature (
     const types = jsonToSolidityTypes(dataObj, { mainTypeName: 'JWT' })
     const solidityTypes = types.types
     const signatureFormatted = '0x' + signature
-    const domain: TypedDataDomain = payload.domain
-    const recoveredAddress = verifyTypedData(domain, solidityTypes, dataObj, signatureFormatted)
+    const eip712Domain: TypedDataDomain = domain ?? payload.domain
+    const recoveredAddress = verifyTypedData(eip712Domain, solidityTypes, dataObj, signatureFormatted)
     signer = authenticators.find(authenticator => {
       if (typeof authenticator.blockchainAccountId === 'string') {
         const [, chainId, address] = authenticator.blockchainAccountId.split(':')
         if (address.toLowerCase() === recoveredAddress.toLowerCase()) {
-          if (domain?.chainId !== undefined && domain.chainId !== null) {
-            return domain.chainId.toString() === chainId
+          if (eip712Domain?.chainId !== undefined && eip712Domain.chainId !== null) {
+            return eip712Domain.chainId.toString() === chainId
           }
           return true
         }
       } else if (typeof authenticator.ethereumAddress === 'string') {
-        if (domain.chainId !== undefined && domain.chainId !== null) {
+        if (eip712Domain.chainId !== undefined && eip712Domain.chainId !== null) {
           return authenticator.ethereumAddress.toLowerCase() === recoveredAddress.toLowerCase()
         }
       }

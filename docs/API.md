@@ -104,7 +104,7 @@ The signing function itself takes the data as a `Uint8Array` or `string` and ret
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `ethersSigner` | `Signer` | an Ethers' signer. It could be used to pass external signers connected e.g. with walletconnect or injected a browser context. |
-| `domain`? | `TypedDataDomain` | an EIP-712 domain object |
+| `domain`? | `TypedDataDomain` | an EIP-712 domain object. If set, when the signer receives data to sign with header.domain not set, if will default to this one. |
 
 ##### Returns
 
@@ -132,11 +132,13 @@ the EIP-712 Ethereum Typed Data SignerAlgorithm
 
 ### verifyEthTypedDataSignature()
 
-> **verifyEthTypedDataSignature**(`data`, `signature`, `authenticators`): [`VerificationMethod`](API.md#verificationmethod)
+> **verifyEthTypedDataSignature**(`data`, `signature`, `authenticators`, `domain`?): [`VerificationMethod`](API.md#verificationmethod)
 
 Verifies a JWT signature using the EIP-712 algorithm. The TypedData structure
 is automatically inferred from the header and payload of the JWT: `{ header:
-any, payload:: any }`.
+any, payload:: any }`. The EIP-712 domain should be obtained from the
+`payload.domain` of the input data. If not present, or may be overriden, an
+optional domain argument `domain`.
 
 #### Parameters
 
@@ -145,6 +147,7 @@ any, payload:: any }`.
 | `data` | `string` | the JWT data: headerBase64Url.payloadBase64Url |
 | `signature` | `string` | the JWT signature encoded in base64url |
 | `authenticators` | [`VerificationMethod`](API.md#verificationmethod)[] | the list of verification methods to verify the signature against |
+| `domain`? | `TypedDataDomain` | an optional @link{TypedDataDomain} to use instead of the one in `payload.domain` |
 
 #### Returns
 

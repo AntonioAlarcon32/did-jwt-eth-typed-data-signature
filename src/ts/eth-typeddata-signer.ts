@@ -27,35 +27,32 @@ export function ethTypedDataSigner (privateKeyHex: string, domain?: TypedDataDom
  * The signing function itself takes the data as a `Uint8Array` or `string` and returns a `base64Url`-encoded signature.
  *
  * @param ethersSigner an Ethers' signer. It could be used to pass external signers connected e.g. with walletconnect or injected a browser context.
- * @param domain an EIP-712 domain object
+ * @param domain an EIP-712 domain object. If set, when the signer receives data to sign with header.domain not set, if will default to this one.
  *
  * @returns a signer that signs using EIP-712 (Ethereum Typed Data) signarures
  */
 export function ethTypedDataSigner (ethersSigner: EthersSigner, domain?: TypedDataDomain): Signer
 
 export function ethTypedDataSigner (ethersSignerOrPrivateKey: SigningKey | string | EthersSigner, domain?: TypedDataDomain): Signer {
-  const signer = async (data: string | Uint8Array): Promise<string> => {
+  const signer = async function (data: string | Uint8Array): Promise<string> {
     let dataObj: Record<string, any>
     const dataStr = typeof data !== 'string' ? (new TextDecoder()).decode(data) : data
     try {
       dataObj = JSON.parse(dataStr)
     } catch (error) {
-      // Let us check if it is a JWT signature of headerB64.payloadB64.signatureb64
+      // Let us check if it is headerB64.payloadB64 of a JWT
       // Since there is no signature now we just add a fake one and try to decode the JWT
       const { header, payload } = decodeJWT(dataStr + '.fakesignature')
       dataObj = {
         header,
         payload
       }
-      if (dataObj.payload.domain === undefined) {
-        dataObj.payload.domain = domain
-      } else if (domain === undefined) {
-        domain = dataObj.payload.domain
-      }
     }
 
-    if (domain === undefined) {
-      throw new Error('No domain specified. Pass the domain argument or define domain in the JWS payload')
+    const eip712Domain: TypedDataDomain = dataObj.payload?.domain ?? domain // if the object to sign does not define a domain we set the default one
+
+    if (eip712Domain === undefined) {
+      throw new Error('No domain specified. Create the signer with the domain argument or pass domain in the JWS payload.domain')
     }
 
     const types = jsonToSolidityTypes(dataObj, { mainTypeName: 'JWT' })
@@ -63,7 +60,7 @@ export function ethTypedDataSigner (ethersSignerOrPrivateKey: SigningKey | strin
 
     const wallet = (typeof ethersSignerOrPrivateKey === 'string' || ethersSignerOrPrivateKey instanceof SigningKey) ? new Wallet(ethersSignerOrPrivateKey) : ethersSignerOrPrivateKey
 
-    let signature: string = await wallet.signTypedData(domain, solidityTypes, dataObj)
+    let signature: string = await wallet.signTypedData(eip712Domain, solidityTypes, dataObj)
     if (signature.startsWith('0x')) {
       signature = signature.slice(2)
     }
@@ -82,13 +79,17 @@ export function ethTypedDataSigner (ethersSignerOrPrivateKey: SigningKey | strin
  */
 export function EthTypedDataSignerAlgorithm (): SignerAlgorithm {
   return async function sign (payload: string, signer: Signer): Promise<string> {
+    const invalidSignerErrorMsg = 'only a Signer created with the ethTypedDataSigner function should be used here'
     try {
       await signer('invalid JSON data')
-      throw new Error('only a Signer created with the ethTypedDataSigner function can be used here')
+      throw new Error(invalidSignerErrorMsg)
     } catch (error) {
+      if (error instanceof Error && error.message === invalidSignerErrorMsg) {
+        throw new Error(invalidSignerErrorMsg)
+      }
       const signature = await signer(payload)
       if (typeof signature !== 'string') {
-        throw new Error('only a Signer created with the ethTypedDataSigner function can be used here')
+        throw new Error(invalidSignerErrorMsg)
       }
       return signature
     }
