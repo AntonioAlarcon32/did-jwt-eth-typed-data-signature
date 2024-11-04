@@ -15,7 +15,7 @@
     "url": "git+https://github.com/AntonioAlarcon32/did-jwt-eth-typed-data-signature.git"
   },
   "license": "EUPL-1.2",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "main": "./dist/cjs/index.node.js",
   "browser": "./dist/esm/index.browser.js",
   "types": "./dist/index.d.ts",

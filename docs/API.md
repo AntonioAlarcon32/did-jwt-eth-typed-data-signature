@@ -1,4 +1,4 @@
-# did-jwt-eth-typed-data-signature v0.9.4
+# did-jwt-eth-typed-data-signature v0.9.5
 
 EIP-712 Ethereum TypedData Signer/Verifier for DID-JWT. It supports using any Web3 connected wallet.
 
