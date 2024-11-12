@@ -51,6 +51,7 @@ import * as {{PKG_CAMELCASE}} from '{{PKG_NAME}}'
 A typical use would be to use any web3 wallet to sign a JWT using `did-jwt`. With `did-jwt`, verification keys are resolved using the Decentralized ID (DID) of the signing identity of the token, which is passed as the `iss` attribute of the JWT payload. As a result for verification to work, the verification key should be added to the issuer's DID document.
 
 1. Import did-jwt and the external ethereum typeddate signer
+
     ```typescript
     import {
       ethTypedDataSigner,
@@ -68,18 +69,24 @@ A typical use would be to use any web3 wallet to sign a JWT using `did-jwt`. Wit
     } from 'did-jwt';
 
     ```
+  
     > You should use a version of did-jwt supporting Ethereum EIP-712 typed-data signatures. There is currently a pull request on the main track. On the mean time you can install the did-jwt fork at [this fork](https://github.com/AntonioAlarcon32/did-jwt)
 2. Let use a web3 signer using an injected provider and the [`ethers`](https://github.com/ethers-io/ethers.js) library
+
     ```typescript
     const provider = new BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
     ```
+
 3. Add the algorithms to did-jwt
+
     ```typescript
     AddSigningAlgorithm('EthTypedDataSignature', EthTypedDataSignerAlgorithm())
     AddVerifierAlgorithm('EthTypedDataSignature', verifyEthTypedDataSignature, validSignatures)
     ```
+
 4. Define the domain and ethTypedDataSigner
+
     ```typescript
     const domain: TypedDataDomain = {
       name: 'VerifiableCredential',
@@ -88,7 +95,9 @@ A typical use would be to use any web3 wallet to sign a JWT using `did-jwt`. Wit
     };
     const jwtSigner = ethTypedDataSigner(signer, domain);
     ```
+
 5. Now you can use the signer to sign and verify did-jwtSigner
+
     ```typescript
         const newJwt = await createJWT(
           { sub: `did:ethr:sepolia:${await signer.getAddress()}`, name: 'Bob Smith', domain },
@@ -96,6 +105,7 @@ A typical use would be to use any web3 wallet to sign a JWT using `did-jwt`. Wit
           { alg: 'EthTypedDataSignature' }
         )
     ```
+
 ## API reference documentation
 
 [Check the API](../../docs/API.md)
