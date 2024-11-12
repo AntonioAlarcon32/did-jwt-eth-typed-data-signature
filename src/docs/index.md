@@ -7,7 +7,7 @@
 
 {{PKG_DESCRIPTION}}
 
-- [{{PKG_NAME}}](#pkg_name)
+- [{{PKG\_NAME}}](#pkg_name)
   - [Install](#install)
   - [Usage example](#usage-example)
   - [API reference documentation](#api-reference-documentation)
@@ -17,7 +17,7 @@
 `{{PKG_NAME}}` can be imported to your project with `npm`:
 
 ```console
-npm install {{PKG_NAME}}
+npm install https://github.com/AntonioAlarcon32/did-jwt-eth-typed-data-signature
 ```
 
 Then either require (Node.js CJS):

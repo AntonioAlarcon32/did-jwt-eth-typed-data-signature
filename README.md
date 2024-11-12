@@ -7,7 +7,7 @@
 
 EIP-712 Ethereum TypedData Signer/Verifier for DID-JWT. It supports using any Web3 connected wallet.
 
-- [did-jwt-eth-typed-data-signature](#pkg_name)
+- [{{PKG\_NAME}}](#pkg_name)
   - [Install](#install)
   - [Usage example](#usage-example)
   - [API reference documentation](#api-reference-documentation)
@@ -17,7 +17,7 @@ EIP-712 Ethereum TypedData Signer/Verifier for DID-JWT. It supports using any We
 `did-jwt-eth-typed-data-signature` can be imported to your project with `npm`:
 
 ```console
-npm install did-jwt-eth-typed-data-signature
+npm install https://github.com/AntonioAlarcon32/did-jwt-eth-typed-data-signature
 ```
 
 Then either require (Node.js CJS):
