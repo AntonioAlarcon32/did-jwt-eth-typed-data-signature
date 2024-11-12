@@ -3,8 +3,13 @@
   "description": "EIP-712 Ethereum TypedData Signer/Verifier for DID-JWT. It supports using any Web3 connected wallet.",
   "private": true,
   "keywords": [
-    "keyword1",
-    "keyword2"
+    "ethereum",
+    "eip712",
+    "did",
+    "web3",
+    "TypedData",
+    "did-jwt",
+    "ssi"
   ],
   "contributors": [
     "Antonio Alarcón García-Saavedra <antonio.alarcon@upc.edu> (https://github.com/AntonioAlarcon32)",
